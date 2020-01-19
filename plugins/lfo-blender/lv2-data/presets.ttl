@@ -1,0 +1,46 @@
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix pset:  <http://lv2plug.in/ns/ext/presets#> .
+
+<http://bramgiesen.com/lfo-blender#preset001>
+    lv2:port [
+        lv2:symbol "Blend" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LfoFrequency" ;
+        pset:value -0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_TYPE" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_PHASE" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_TYPE" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_PHASE" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_TYPE" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_PHASE" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_TYPE" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "LFO_1_PHASE" ;
+        pset:value 0.000000 ;
+    ] .
+
+
