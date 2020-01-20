@@ -17,4 +17,3 @@ Still needs to be tested:
 
 Currently the tempo is set by a master tempo control. But I would like to add the following option in the future:
 * Sync LFOs to host tempo
-* Sync LFOs with CV clock in
