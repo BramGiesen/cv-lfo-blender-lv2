@@ -48,7 +48,7 @@ inline void Oscillator::setPhase(double phase)
 inline void Oscillator::setPhaseOffset(double offset)
 {
     if (offset != this->offset) {
-        phase = offset;
+        phase = fmod(phase + (offset - this->offset), 1.0);
     }
 
     this->offset = offset;
