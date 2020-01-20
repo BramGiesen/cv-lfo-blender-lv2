@@ -112,6 +112,7 @@ private:
     float lfo3Phase;
     int   lfo4Type;
     float lfo4Phase;
+    bool  reset_phase;
 
     float lfo1 = 0.0;
     float lfo2 = 0.0;

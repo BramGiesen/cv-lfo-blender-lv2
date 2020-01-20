@@ -25,7 +25,9 @@ LfoBlender::LfoBlender()
     lfo3Phase = 0.0;
     lfo4Type  = 0;
     lfo4Phase = 0.0;
+    reset_phase = false;
 
+    const TimePosition& position = getTimePosition();
 
     float phase = 0.0;
 
@@ -63,6 +65,14 @@ LfoBlender::LfoBlender()
 
 LfoBlender::~LfoBlender()
 {
+    delete[] oscillators1;
+    oscillators1 = nullptr;
+    delete[] oscillators2;
+    oscillators2 = nullptr;
+    delete[] oscillators3;
+    oscillators3 = nullptr;
+    delete[] oscillators4;
+    oscillators4 = nullptr;
 }
 
 // -----------------------------------------------------------------------
@@ -97,7 +107,7 @@ void LfoBlender::initParameter(uint32_t index, Parameter& parameter)
         parameter.unit       = "";
         parameter.ranges.def = 0.f;
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 5.f;
+        parameter.ranges.max = 4.f;
         break;
     case paramLfo1Phase:
         parameter.hints      = kParameterIsAutomable;
@@ -115,7 +125,7 @@ void LfoBlender::initParameter(uint32_t index, Parameter& parameter)
         parameter.unit       = "";
         parameter.ranges.def = 0.f;
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 5.f;
+        parameter.ranges.max = 4.f;
         break;
     case paramLfo2Phase:
         parameter.hints      = kParameterIsAutomable;
@@ -133,7 +143,7 @@ void LfoBlender::initParameter(uint32_t index, Parameter& parameter)
         parameter.unit       = "";
         parameter.ranges.def = 0.f;
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 5.f;
+        parameter.ranges.max = 4.f;
         break;
     case paramLfo3Phase:
         parameter.hints      = kParameterIsAutomable;
@@ -151,7 +161,7 @@ void LfoBlender::initParameter(uint32_t index, Parameter& parameter)
         parameter.unit       = "";
         parameter.ranges.def = 0.f;
         parameter.ranges.min = 0.0f;
-        parameter.ranges.max = 5.f;
+        parameter.ranges.max = 4.f;
         break;
     case paramLfo4Phase:
         parameter.hints      = kParameterIsAutomable;
@@ -263,15 +273,34 @@ void LfoBlender::deactivate()
 
 void LfoBlender::run(const float** inputs, float** outputs, uint32_t frames)
 {
+    const float* cv_blend = inputs[0];
+    const float* cv_clock = inputs[1];
+    const float* cv_reset = inputs[2];
+
     float* output1 = outputs[0];
     float* output2 = outputs[1];
     float* output3 = outputs[2];
     float* output4 = outputs[3];
     float* output5 = outputs[4];
 
+
     // Main processing body
     for (uint32_t f = 0; f < frames; ++f)
     {
+
+        if (cv_reset[f] > 0.0 && !reset_phase) {
+            for (unsigned osc = 0; osc < 5; osc++) {
+                oscillators1[osc]->setPhase(lfo1Phase);
+                oscillators2[osc]->setPhase(lfo2Phase);
+                oscillators3[osc]->setPhase(lfo3Phase);
+                oscillators4[osc]->setPhase(lfo4Phase);
+            }
+            reset_phase = true;
+        } else if (cv_reset[f] == 0.0 && reset_phase) {
+            reset_phase = false;
+        }
+
+
         for (unsigned osc = 0; osc < 5; osc++) {
             oscillators1[osc]->setFrequency(lfoFrequency);
             oscillators2[osc]->setFrequency(lfoFrequency);
@@ -284,9 +313,11 @@ void LfoBlender::run(const float** inputs, float** outputs, uint32_t frames)
             oscillators4[osc]->setPhaseOffset(lfo4Phase);
         }
 
-        int switcher = (int)blend;
+        int switcher = (int)blend + (int)cv_blend[f];
+        switcher = (switcher <= 3) ? switcher : 3;
         float mix = 0.f;
-        float fBlend = blend - (int)blend;
+        float fBlend = (blend + (float)cv_blend[f]) - switcher;
+        fBlend = (fBlend > 0) ? fBlend : 0;
         float sampleA = 0.f;
         float sampleB = 0.f;
 
