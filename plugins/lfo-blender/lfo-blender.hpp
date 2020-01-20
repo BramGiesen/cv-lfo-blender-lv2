@@ -112,7 +112,15 @@ private:
     float lfo3Phase;
     int   lfo4Type;
     float lfo4Phase;
-    bool  reset_phase;
+
+    int counted_frames = 0;
+    int current_frames = 0;
+
+    bool tick = false;
+    bool first_clock = false;
+    bool clock_started = false;
+    bool reset_phase = false;
+    bool counting = false;
 
     float lfo1 = 0.0;
     float lfo2 = 0.0;

@@ -288,6 +288,29 @@ void LfoBlender::run(const float** inputs, float** outputs, uint32_t frames)
     for (uint32_t f = 0; f < frames; ++f)
     {
 
+        if (cv_clock[f] > 0.0 && !tick) {
+
+            counting = true;
+            counted_frames = current_frames;
+            current_frames = 0;
+
+            if (first_clock)
+                clock_started = true;
+
+            first_clock = true;
+            tick = true;
+
+        } else if (cv_clock[f] == 0.0 && tick) {
+            tick = false;
+        }
+
+        if (clock_started) {
+            lfoFrequency = 48000 / counted_frames;
+        }
+
+        if (counting)
+            current_frames++;
+
         if (cv_reset[f] > 0.0 && !reset_phase) {
             for (unsigned osc = 0; osc < 5; osc++) {
                 oscillators1[osc]->setPhase(lfo1Phase);
