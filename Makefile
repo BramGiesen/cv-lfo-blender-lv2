@@ -6,6 +6,11 @@
 
 include dpf/Makefile.base.mk
 
+PREFIX ?= /usr
+libdir ?= $(PREFIX)/lib
+
+NAME = lfo-blender
+
 all: plugins gen
 
 # --------------------------------------------------------------
@@ -24,7 +29,7 @@ plugins:
 ifneq ($(CROSS_COMPILING),true)
 gen: plugins dpf/utils/lv2_ttl_generator
 	@$(CURDIR)/dpf/utils/generate-ttl.sh
-	cp plugins/lfo-blender/lv2-data/* bin/lfo-blender.lv2/
+	cp plugins/lfo-blender/lv2-data/* bin/$(NAME).lv2/
 ifeq ($(MACOS),true)
 	@$(CURDIR)/dpf/utils/generate-vst-bundles.sh
 endif
@@ -37,13 +42,15 @@ endif
 
 # --------------------------------------------------------------
 install:
-	cp -r bin/*.lv2/ /usr/lib/lv2
-	cp bin/*.so /usr/lib/vst
+	install -d $(DESTDIR)$(libdir)/lv2/$(NAME).lv2
+
+	install -m 644 bin/$(NAME).lv2/*.so  $(DESTDIR)$(libdir)/lv2/$(NAME).lv2/
+	install -m 644 bin/$(NAME).lv2/*.ttl $(DESTDIR)$(libdir)/lv2/$(NAME).lv2/
 
 clean:
 	#$(MAKE) clean -C dpf/dgl
 	$(MAKE) clean -C dpf/utils/lv2-ttl-generator
-	$(MAKE) clean -C plugins/lfo-blender
+	$(MAKE) clean -C plugins/$(NAME)
 	rm -rf bin build
 
 # --------------------------------------------------------------
