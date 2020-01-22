@@ -15,17 +15,18 @@ LfoBlender::LfoBlender()
 
     lowpass.setFc(100.0/(double)sampleRate);
 
-    blend     = 0.0;
+    blend        = 0.0;
+    clockSource  = 0.0;
     lfoFrequency = 10.0;
-    lfo1Type  = 0;
-    lfo1Phase = 0.0;
-    lfo2Type  = 0;
-    lfo2Phase = 0.0;
-    lfo3Type  = 0;
-    lfo3Phase = 0.0;
-    lfo4Type  = 0;
-    lfo4Phase = 0.0;
-    reset_phase = false;
+    lfo1Type     = 0;
+    lfo1Phase    = 0.0;
+    lfo2Type     = 0;
+    lfo2Phase    = 0.0;
+    lfo3Type     = 0;
+    lfo3Phase    = 0.0;
+    lfo4Type     = 0;
+    lfo4Phase    = 0.0;
+    reset_phase  = false;
 
     const TimePosition& position = getTimePosition();
 
@@ -90,6 +91,15 @@ void LfoBlender::initParameter(uint32_t index, Parameter& parameter)
         parameter.ranges.def = 0.0f;
         parameter.ranges.min = 0.0f;
         parameter.ranges.max = 3.f;
+        break;
+    case paramClockSource:
+        parameter.hints      = kParameterIsAutomable;
+        parameter.name       = "ClockSource";
+        parameter.symbol     = "ClockSource";
+        parameter.unit       = "";
+        parameter.ranges.def = 0.0f;
+        parameter.ranges.min = 0.0f;
+        parameter.ranges.max = 1.f;
         break;
     case paramLfoFrequency:
         parameter.hints      = kParameterIsAutomable;
@@ -192,6 +202,8 @@ float LfoBlender::getParameterValue(uint32_t index) const
     {
     case paramBlend:
         return blend;
+    case paramClockSource:
+        return clockSource;
     case paramLfoFrequency:
         return lfoFrequency;
     case paramLfo1Type:
@@ -219,6 +231,9 @@ void LfoBlender::setParameterValue(uint32_t index, float value)
     {
     case paramBlend:
         blend = value;
+        break;
+    case paramClockSource:
+        clockSource = value;
         break;
     case paramLfoFrequency:
         lfoFrequency = value;
@@ -304,8 +319,10 @@ void LfoBlender::run(const float** inputs, float** outputs, uint32_t frames)
             tick = false;
         }
 
-        if (clock_started) {
-            lfoFrequency = 48000 / counted_frames;
+        if (clockSource > 0.0) {
+            if (clock_started) {
+                lfoFrequency = 48000 / counted_frames;
+            }
         }
 
         if (counting)

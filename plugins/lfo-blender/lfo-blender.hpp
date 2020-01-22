@@ -18,6 +18,7 @@ public:
     enum Parameters
     {
         paramBlend = 0,
+        paramClockSource,
         paramLfoFrequency,
         paramLfo1Type,
         paramLfo1Phase,
@@ -103,6 +104,7 @@ private:
     float sampleRate;
 
     float blend;
+    float clockSource;
     float lfoFrequency;
     int   lfo1Type;
     float lfo1Phase;

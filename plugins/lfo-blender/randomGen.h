@@ -33,7 +33,7 @@ private:
 inline void RandomGenerator::calculate()
 {
     if(phase > 0.9 && notSet){
-        randomValue = rand() % 100;
+        randomValue = ((rand() % 100) * 0.02) - 1;
     }
     sample = randomValue;
 }
