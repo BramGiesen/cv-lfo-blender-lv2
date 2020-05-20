@@ -1,6 +1,6 @@
 # cv-lfo-blender-lv2
 
-The CV-LFO-Blender is a plugin that has 4 LFOs. Each LFO has a parameter to select a waveform and a parameter to set a phase offset for each LFO independently. It has a global blend control to create a mix between the LFOs. The plugin has for 5 CV outputs, 1 for the LFO mix, and 4 for each LFO seperatly.
+The CV-LFO-Blender is a plugin that has 4 LFOs. Each LFO has a parameter to select a waveform and a parameter to set a phase offset for each LFO independently. It has a global blend control to create a mix between the LFOs. The plugin has for 5 CV outputs, 1 for the LFO mix, and 4 for each LFO separately.
 
 ##### Installation
 
